@@ -33,9 +33,14 @@ def main() -> None:
         "line must not contain hidden control characters"
     )
     assert text.strip(), "line must not be only whitespace"
-    os.makedirs("/output", exist_ok=True)
-    with open("/output/entry.txt", "w", encoding="utf-8", newline="") as f:
+    # Output directory defaults to /output (the harness path); override
+    # with OUTPUT_DIR for local runs without root access.
+    out_dir = os.environ.get("OUTPUT_DIR", "/output")
+    out_path = os.path.join(out_dir, "entry.txt")
+    os.makedirs(out_dir, exist_ok=True)
+    with open(out_path, "w", encoding="utf-8", newline="") as f:
         f.write(text)
+    print(f"wrote {len(text)} chars to {out_path}")
 
 
 if __name__ == "__main__":
